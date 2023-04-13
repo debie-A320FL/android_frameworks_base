@@ -54,6 +54,18 @@ public final class PasspointConfiguration implements Parcelable {
      * Maximum bytes for URL string.
      */
     private static final int MAX_URL_BYTES = 1023;
+    
+	 /**
+	 * Maximum size for match entry, just to limit the size of the Passpoint config.
+	 * @hide
+	 */
+    public static final int MAX_NUMBER_OF_ENTRIES = 16;
+    
+	 /**
+	 * Maximum bytes for a string entry like FQDN and friendly name.
+	 * @hide
+	 */
+    public static final int MAX_STRING_LENGTH = 255;
 
     /**
      * Integer value used for indicating null value in the Parcel.
