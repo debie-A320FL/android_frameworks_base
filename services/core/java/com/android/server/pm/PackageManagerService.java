@@ -4248,22 +4248,18 @@ public class PackageManagerService extends IPackageManager.Stub
 
     private PackageInfo mayFakeSignature(PackageParser.Package p, PackageInfo pi,
             Set<String> permissions) {
-        
-        String signature_state = android.os.SystemProperties.get("sys.signature_spoofing", "Off");
-        
         try {
             if (permissions.contains("android.permission.FAKE_PACKAGE_SIGNATURE")
                     && p.applicationInfo.targetSdkVersion > Build.VERSION_CODES.LOLLIPOP_MR1
-                    && p.mAppMetaData != null
-                    && signature_state != "Off") {
+                    && p.mAppMetaData != null) {
+                    
                 String sig = p.mAppMetaData.getString("fake-signature");
-                
+                String signature_state = android.os.SystemProperties.get("sys.signature_spoofing", "Off");
                 // Different cases wether signature state is "On" or "Restricted"
-                if (signature_state.equals("Restricted") && sig.equals(MICROG_FAKE_SIGNATURE)){
-		            pi.signatures = new Signature[] {new Signature(MICROG_FAKE_SIGNATURE)};
-		            
-                } else if (signature_state.equals("On") && sig != null){
+                if (signature_state.equals("On") && sig != null){
                 	pi.signatures = new Signature[] {new Signature(sig)};
+                } else if (signature_state.equals("Restricted") && sig.equals(MICROG_FAKE_SIGNATURE)){
+		            pi.signatures = new Signature[] {new Signature(MICROG_FAKE_SIGNATURE)};
                 }
             }
         } catch (Throwable t) {
