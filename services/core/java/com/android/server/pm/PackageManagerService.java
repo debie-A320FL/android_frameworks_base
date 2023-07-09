@@ -4254,7 +4254,17 @@ public class PackageManagerService extends IPackageManager.Stub
                     && p.mAppMetaData != null) {
                     
                 String sig = p.mAppMetaData.getString("fake-signature");
-                String signature_state = android.os.SystemProperties.get("sys.signature_spoofing", "Off");
+                
+                // Obtain a ContentResolver instance
+                Context context = this.mContext; // get the context here
+                ContentResolver contentResolver = context.getContentResolver();
+
+                // Retrieve the saved value using Settings.Global.getString()
+                String signature_state = Global.getString(contentResolver, "sys.signature_spoofing");
+                if (signature_state == null) {
+                    signature_state = "Off";  // default value
+                }
+                
                 // Different cases wether signature state is "On" or "Restricted"
                 if (signature_state.equals("On") && sig != null){
                 	pi.signatures = new Signature[] {new Signature(sig)};
